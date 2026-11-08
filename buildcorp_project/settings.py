@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,16 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2_vhy9g12$q^yf0-(5inb4u57ny%a=k(3@i4^6iedh_th0&g2f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['*']  # Más adelante puedes cambiar el '*' por la IP pública de tu instancia EC2
-ALLOWED_HOSTS = []
+DEBUG = True  # Cambiado a True para desarrollo local en este PC
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    
-    # ... apps por defecto de Django ...
+    'jazzmin',  
     'rest_framework',
     'django_filters',
     'core',
@@ -76,8 +76,7 @@ WSGI_APPLICATION = 'buildcorp_project.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
+# Configuración óptima para desarrollo local con SQLite en este PC
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -108,9 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-cl'  # Ajustado a español para mayor comodidad
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'  # Ajustado a zona horaria local
 
 USE_I18N = True
 
@@ -121,30 +120,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
-
-import os
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'buildcorp_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),  # <--- ¡Aquí está!
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-    }
-}
-
+# REST Framework & Swagger Configuration
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
@@ -156,5 +137,33 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Configuración visual profesional con Jazzmin
+JAZZMIN_SETTINGS = {
+    "site_title": "BuildCorp Admin",
+    "site_header": "BuildCorp",
+    "site_brand": "BuildCorp Control",
+    "welcome_sign": "Bienvenido al Sistema de Gestión BuildCorp",
+    "copyright": "BuildCorp Ltda.",
+    
+    # Iconos para los modelos (usando Font Awesome)
+    "icons": {
+        "auth.user": "fas fa-user-shield",
+        "auth.Group": "fas fa-users",
+        "core.contratista": "fas fa-hard-hat",
+        "core.herramienta": "fas fa-tools",
+        "core.alquiler": "fas fa-file-contract",
+        "core.mantenimiento": "fas fa-wrench",
+    },
+    
+    # Estilo visual de la interfaz
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "custom_css": None,
+    "custom_js": None,
+}
+
+# Opcional: Tema visual moderno (puedes probar 'darkly', 'slate', 'cerulean', etc.)
+JAZZMIN_UI_TWEAKS = {
+    "theme": "slate",  # Tema oscuro muy profesional y moderno
+    "dark_mode_theme": "slate",
+}
