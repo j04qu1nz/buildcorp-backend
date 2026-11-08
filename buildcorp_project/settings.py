@@ -1,3 +1,4 @@
+
 """
 Django settings for buildcorp_project project.
 
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-2_vhy9g12$q^yf0-(5inb4u57ny%a=k(3@i4^6iedh_th0&g2f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS = ['*']  # Más adelante puedes cambiar el '*' por la IP pública de tu instancia EC2
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django_filters',
     'core',
     'drf_spectacular',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+   'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -138,8 +141,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'buildcorp_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),  # <--- ¡Aquí está!
+        'USER': 'buildcorp_user',
+        'PASSWORD': 'lolazo123',
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
@@ -158,3 +161,6 @@ SPECTACULAR_SETTINGS = {
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Ocultar version de Django / deshabilitar headers innecesarios si aplica SECURE_CONTENT_TYPE_NOSNIFF = True
+
