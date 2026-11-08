@@ -11,6 +11,7 @@ class Contratista(models.Model):
     def __str__(self):
         return f"{self.nombre} ({self.empresa}) - Bloqueado: {self.bloqueado}"
 
+
 class Herramienta(models.Model):
     ESTADOS = [
         ('Disponible', 'Disponible'),
@@ -28,6 +29,7 @@ class Herramienta(models.Model):
     def __str__(self):
         return f"[{self.codigo}] {self.nombre} - Estado: {self.estado}"
 
+
 class Alquiler(models.Model):
     herramienta = models.ForeignKey(Herramienta, on_delete=models.CASCADE)
     contratista = models.ForeignKey(Contratista, on_delete=models.CASCADE)
@@ -38,13 +40,13 @@ class Alquiler(models.Model):
     devuelto = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        # Regla de negocio: Validar que el contratista no esté bloqueado antes de alquilar
         if self.contratista.bloqueado:
             raise ValueError("No se puede realizar el alquiler: El contratista está bloqueado por morosidad.")
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Alquiler #{self.id} - {self.herramienta.nombre} a {self.contratista.nombre}"
+        return f"Alquiler #{self.id} | {self.herramienta.nombre} a {self.contratista.nombre}"
+
 
 class Mantenimiento(models.Model):
     herramienta = models.ForeignKey(Herramienta, on_delete=models.CASCADE)
@@ -54,4 +56,3 @@ class Mantenimiento(models.Model):
 
     def __str__(self):
         return f"Mantenimiento para {self.herramienta.nombre} el {self.fecha_programada}"
-
